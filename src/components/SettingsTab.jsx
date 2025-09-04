@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Instagram, Camera, Bell, CreditCard, User, Shield } from 'lucide-react';
+import { Instagram, Camera, Bell, CreditCard, User, Shield, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from './Button';
+import { useSocialMedia } from '../hooks/useSocialMedia';
 
 export function SettingsTab() {
   const [notifications, setNotifications] = useState({
@@ -9,10 +10,7 @@ export function SettingsTab() {
     weeklyReports: false
   });
 
-  const [connectedAccounts] = useState({
-    instagram: { connected: true, username: '@test_account_ig' },
-    tiktok: { connected: false, username: null }
-  });
+  const { connectedAccounts, connectAccount, disconnectAccount, isConnecting } = useSocialMedia();
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -63,18 +61,30 @@ export function SettingsTab() {
               <Instagram className="w-8 h-8 text-pink-500" />
               <div>
                 <p className="font-medium text-textPrimary">Instagram Test Account</p>
-                <p className="text-sm text-textSecondary">
-                  {connectedAccounts.instagram.connected 
-                    ? `Connected as ${connectedAccounts.instagram.username}`
-                    : 'Not connected'
-                  }
+                <p className="text-sm text-textSecondary flex items-center gap-2">
+                  {connectedAccounts.instagram ? (
+                    <>
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      Connected as {connectedAccounts.instagram.username}
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-4 h-4 text-red-500" />
+                      Not connected
+                    </>
+                  )}
                 </p>
               </div>
             </div>
             <Button
-              variant={connectedAccounts.instagram.connected ? 'destructive' : 'secondary'}
+              variant={connectedAccounts.instagram ? 'destructive' : 'secondary'}
+              onClick={() => connectedAccounts.instagram 
+                ? disconnectAccount('instagram')
+                : connectAccount('instagram')
+              }
+              disabled={isConnecting}
             >
-              {connectedAccounts.instagram.connected ? 'Disconnect' : 'Connect'}
+              {isConnecting ? 'Connecting...' : (connectedAccounts.instagram ? 'Disconnect' : 'Connect')}
             </Button>
           </div>
 
@@ -83,16 +93,30 @@ export function SettingsTab() {
               <Camera className="w-8 h-8 text-black" />
               <div>
                 <p className="font-medium text-textPrimary">TikTok Test Account</p>
-                <p className="text-sm text-textSecondary">
-                  {connectedAccounts.tiktok.connected 
-                    ? `Connected as ${connectedAccounts.tiktok.username}`
-                    : 'Not connected'
-                  }
+                <p className="text-sm text-textSecondary flex items-center gap-2">
+                  {connectedAccounts.tiktok ? (
+                    <>
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      Connected as {connectedAccounts.tiktok.username}
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-4 h-4 text-red-500" />
+                      Not connected
+                    </>
+                  )}
                 </p>
               </div>
             </div>
-            <Button variant="secondary">
-              Connect
+            <Button 
+              variant={connectedAccounts.tiktok ? 'destructive' : 'secondary'}
+              onClick={() => connectedAccounts.tiktok 
+                ? disconnectAccount('tiktok')
+                : connectAccount('tiktok')
+              }
+              disabled={isConnecting}
+            >
+              {isConnecting ? 'Connecting...' : (connectedAccounts.tiktok ? 'Disconnect' : 'Connect')}
             </Button>
           </div>
         </div>

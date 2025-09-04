@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Zap, BarChart3, Settings, Upload, PlusCircle } from 'lucide-react';
 
-export function AppShell({ children }) {
-  const [activeTab, setActiveTab] = useState('generate');
+export function AppShell({ children, activeTab, setActiveTab }) {
 
   const tabs = [
     { id: 'generate', label: 'Generate', icon: PlusCircle },
@@ -59,7 +58,7 @@ export function AppShell({ children }) {
 
           {/* Content */}
           <main className="p-6 overflow-y-auto h-[calc(100vh-4rem)]">
-            {React.cloneElement(children, { activeTab })}
+            {children}
           </main>
         </div>
       </div>

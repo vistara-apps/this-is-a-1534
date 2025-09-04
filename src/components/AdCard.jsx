@@ -45,8 +45,8 @@ export function AdCard({ ad, variant = 'default', onPost }) {
           {ad.description}
         </p>
 
-        {/* Metrics (if variant includes them) */}
-        {variant === 'withMetrics' && (
+        {/* Metrics (if variant includes them or ad is posted) */}
+        {(variant === 'withMetrics' || ad.posted) && ad.metrics && (
           <div className="grid grid-cols-4 gap-2 mb-4 p-3 bg-bg rounded-lg">
             <div className="text-center">
               <div className="flex items-center justify-center mb-1">
@@ -98,7 +98,10 @@ export function AdCard({ ad, variant = 'default', onPost }) {
               {isPosting ? 'Posting...' : 'Post to Test Account'}
             </button>
           ) : (
-            <button className="flex-1 bg-accent text-white py-2 px-4 rounded-lg font-medium hover:bg-accent/90 transition-colors flex items-center justify-center gap-2">
+            <button 
+              onClick={() => ad.postUrl && window.open(ad.postUrl, '_blank')}
+              className="flex-1 bg-accent text-white py-2 px-4 rounded-lg font-medium hover:bg-accent/90 transition-colors flex items-center justify-center gap-2"
+            >
               <ExternalLink className="w-4 h-4" />
               View Post
             </button>
